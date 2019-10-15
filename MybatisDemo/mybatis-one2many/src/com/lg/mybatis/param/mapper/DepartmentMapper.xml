@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lg.mybatis.param.mapper.DepartmentMapper">
+
+    <resultMap id="BaseResiltMap" type="department">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+        <!--针对单一对象的属性，我们使用association元素-->
+        <!--针对集合对象的属性,我们使用collection元素-->
+        <!--方式一:使用额外SQL-->
+        <!--<collection property="emps" select="com.lg.mybatis.param.mapper.EmployeeMapper.selectByDeptId" column="id"/>-->
+        <!--方式二:使用内联映射-->
+        <!--
+        ofType:集合中泛型的类型
+        -->
+        <collection property="emps" ofType="employee">
+            <id column="e_id" property="id"/>
+            <result column="e_name" property="name"/>
+            <result column="dept_id" property="deptId"/>
+        </collection>
+
+
+    </resultMap>
+    
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into department(name) values(#{name})
+    </insert>
+
+    <select id="get" resultMap="BaseResiltMap">
+        select d.id, d.name,
+                e.id as e_id, e.name as e_name, e.dept_id
+        from department as d
+        inner join employee as e
+        on d.id = e.dept_id
+        where d.id = #{id}
+
+    </select>
+
+</mapper>

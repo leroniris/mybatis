@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lg.mybatis.param.UserMapper">
+    <!--
+    select元素专门用来写查询的SQL
+    id属性：唯一标识，用来表示某一条SQL语句
+            id和mapper的namespace唯一的表示了应用的某一条SQL
+    parameterType属性：表示执行该SQL语句需要的参数类型，建议不写，
+    resultType属性：把结果集中的每一行数据封装成什么类型的对象
+    -->
+    <select id="get" parameterType="java.lang.Long" resultType="com.lg.mybatis.param.domain.User">
+        select id,name,salary from t_user where id=#{id}
+    </select>
+
+    <select id="listAll" resultType="com.lg.mybatis.param.domain.User">
+        select id,name,salary from t_user
+    </select>
+
+    <update id="update">
+        update t_user set name = #{name}, salary=#{salary} where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <!--
+        insert元素：
+            userGenerateKey属性：是否需要返回自动生成的主键
+            keyProperty属性：把自动生成的属性值传递给对象的属性上
+    -->
+    <insert id="save" useGeneratedKeys="true"
+            keyProperty="id"
+            parameterType="com.lg.mybatis.param.domain.User">
+        insert into t_user(name,salary) values(#{name}, #{salary})
+    </insert>
+</mapper>

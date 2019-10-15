@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lg.mybatis.param.mapper.EmployeeMapper">
+
+    <!--当结果集中的列明和对象的属性名称不匹配，处理结果集-->
+    <resultMap id="BaseResultMap" type="com.lg.mybatis.param.domain.Employee">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <!--处理关联对象-->
+        <!--方式一：使用级联方式来封装对象（一般不用）-->
+        <!--<result column="d_id" property="dept.id"/>-->
+        <!--<result column="d_name" property="dept.name"/>-->
+        <!--方式二：使用association元素（推荐）-->
+        <association property="dept" javaType="department" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into employee(name, dept_id) values(#{name}, #{dept.id})
+    </insert>
+
+
+    <select id="get" resultMap="BaseResultMap">
+       select e.id,e.name,d.id as d_id, d.name as d_name from employee as e
+        inner join department as d
+        on e.dept_id=d.id
+        where e.id=#{id}
+    </select>
+
+    <!--<select id="listAll" resultMap="BaseResultMap">-->
+        <!--select id,name,dept_id from employee-->
+    <!--</select>-->
+
+    <select id="listAll" resultType="employee">
+        select e.id,e.name,d.id as d_id, d.name as d_name from employee as e
+        inner join department as d
+        on e.dept_id=d.id
+    </select>
+
+</mapper>

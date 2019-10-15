@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lg.mybatis.param.UserMapper">
+
+    <!--
+        resultMap元素：结果集合对象的映射
+            id属性：   当前mapper文件中resultMap的唯一名称
+            type属性： 把结果集中的每一行数据封装成什么类型的对象
+
+            子元素：
+                id元素：功能和result一模一样，如果主键建议用id,提升性能
+                result元素：匹配对象中的哪一个属性对应表中的哪一列
+    -->
+    <resultMap id="BaseResultMap" type="User">
+        <result column="u_id" property="id"/>
+        <result column="u_name" property="name"/>
+        <result column="u_salary" property="salary"/>
+    </resultMap>
+
+
+    <!--
+    select元素专门用来写查询的SQL
+    id属性：唯一标识，用来表示某一条SQL语句
+            id和mapper的namespace唯一的表示了应用的某一条SQL
+    parameterType属性：表示执行该SQL语句需要的参数类型，建议不写，
+    resultType属性：把结果集中的每一行数据封装成什么类型的对象
+    -->
+    <select id="get" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select u_id,u_name,u_salary from t_user where u_id=#{id}
+    </select>
+
+    <select id="listAll" resultMap="BaseResultMap">
+        select u_id,u_name,u_salary from t_user
+    </select>
+
+</mapper>

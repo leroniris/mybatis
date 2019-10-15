@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lg.mybatis.param.mapper.StudentMapper">
+
+    <resultMap id="BaseResultMap" type="student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="teachers" ofType="teacher" select="com.lg.mybatis.param.mapper.TeacherMapper.selectByStudentId" column="id">
+
+        </collection>
+    </resultMap>
+
+    <select id="get" resultMap="BaseResultMap">
+        select id,name from student where id =#{id}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into student(name) values(#{name})
+    </insert>
+
+
+    <insert id="insertRelationWithTeacher">
+        insert into student_teacher(student_id, teacher_id) values(#{student_id}, #{teacher_id})
+    </insert>
+
+    <delete id="delete">
+        delete from student where id = #{id}
+    </delete>
+
+    <delete id="deleteRelationWithTeacher">
+        delete from student_teacher where student_id = #{student_id}
+    </delete>
+</mapper>
